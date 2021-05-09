@@ -33,7 +33,7 @@ def getResults(request):
             if A in equation:
                 equation = equation.replace(A, f"{i}*tan")
 
-        if "sin" in data["equation"]:
+        if "sin" in equation:
             equation = equation.replace("sin", "math.sin")
         if "cos" in equation:
             equation = equation.replace("cos", "math.cos")
@@ -47,6 +47,14 @@ def getResults(request):
             equation = equation.replace("x^3", "(x*x*x)")
         if "x^4" in equation:
             equation = equation.replace("x^4", "(x*x*x*x)")
+
+        if "math.sin(*x)" in equation:
+            equation = equation.replace("math.sin(*x)", "math.sin(x)")
+        if "math.cos(*x)" in equation:
+            equation = equation.replace("math.cos(*x)", "math.cos(x)")
+        if "math.tan(*x)" in equation:
+            equation = equation.replace("math.tan(*x)", "math.tan(x)")
+
 
         print(equation)
 
