@@ -1,0 +1,10 @@
+body {
+  overflow-x: hidden;
+}
+main {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
