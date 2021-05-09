@@ -14,24 +14,41 @@ import os
 def getResults(request):
     try:
         data = request.data
-
+        numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "x"]
         xi = data["xi"]
         xu = data["xu"]
         stop = float(data["stop"])
+        equation = data["equation"]
+
+        for i in (x for x in numbers if x in equation):
+            A = f"{i}sin"
+            if A in equation:
+                equation = equation.replace(A, f"{i}*sin")
+        for i in (x for x in numbers if x in equation):
+            A = f"{i}cos"
+            if A in equation:
+                equation = equation.replace(A, f"{i}*cos")
+        for i in (x for x in numbers if x in equation):
+            A = f"{i}tan"
+            if A in equation:
+                equation = equation.replace(A, f"{i}*tan")
+
         if "sin" in data["equation"]:
-            equation = data["equation"].replace("sin", "math.sin")
-        if "cos" in data["equation"]:
-            equation = data["equation"].replace("cos", "math.cos")
-        if "tan" in data["equation"]:
-            equation = data["equation"].replace("tan", "math.tan")
-        if "x" in data["equation"]:
-            equation = data["equation"].replace("x", "*x")
+            equation = equation.replace("sin", "math.sin")
+        if "cos" in equation:
+            equation = equation.replace("cos", "math.cos")
+        if "tan" in equation:
+            equation = equation.replace("tan", "math.tan")
+        if "x" in equation:
+            equation = equation.replace("x", "*x")
         if "x^2" in equation:
             equation = equation.replace("x^2", "(x*x)")
         if "x^3" in equation:
             equation = equation.replace("x^3", "(x*x*x)")
         if "x^4" in equation:
             equation = equation.replace("x^4", "(x*x*x*x)")
+
+        print(equation)
 
         templateFinal = []
         counter = 1
@@ -104,6 +121,7 @@ def getResults(request):
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
-        message = {'detail': 'Lo siento, no puedo resolver esa formula, intenta reescribir la ecuación  '}
+        message = {
+            'detail': 'Lo siento, no puedo resolver esa formula, intenta reescribir la ecuación  '}
 
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
