@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'rest_framework',
 ]
-GIT 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
