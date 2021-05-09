@@ -24,7 +24,6 @@ def getResults(request):
             equation = data["equation"].replace("cos", "math.cos")
         if "tan" in data["equation"]:
             equation = data["equation"].replace("tan", "math.tan")
-        if "x^2" in equation:
         if "x" in data["equation"]:
             equation = data["equation"].replace("x", "*x")
         if "x^2" in equation:
