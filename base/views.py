@@ -9,6 +9,10 @@ import math
 import sys
 import os
 
+
+def change(equation, A, B):
+    equation = equation.replace(A, B)
+
 # Create your views here.
 @api_view(["POST"])
 def getResults(request):
@@ -32,6 +36,10 @@ def getResults(request):
             A = f"{i}tan"
             if A in equation:
                 equation = equation.replace(A, f"{i}*tan")
+        for i in (x for x in numbers if x in equation):
+            A = f"{i}e"
+            if A in equation:
+                equation = equation.replace(A, f"{i}*e")
 
         if "sin" in equation:
             equation = equation.replace("sin", "math.sin")
@@ -41,19 +49,36 @@ def getResults(request):
             equation = equation.replace("tan", "math.tan")
         if "x" in equation:
             equation = equation.replace("x", "*x")
+
         if "x^2" in equation:
             equation = equation.replace("x^2", "(x*x)")
         if "x^3" in equation:
             equation = equation.replace("x^3", "(x*x*x)")
         if "x^4" in equation:
             equation = equation.replace("x^4", "(x*x*x*x)")
-
+        if "^*x" in equation:
+            equation = equation.replace("^*x", "^x")
+        if "e^x" in equation:
+            equation = equation.replace("e^x", "math.pow(math.e, x)")
         if "math.sin(*x)" in equation:
             equation = equation.replace("math.sin(*x)", "math.sin(x)")
         if "math.cos(*x)" in equation:
             equation = equation.replace("math.cos(*x)", "math.cos(x)")
         if "math.tan(*x)" in equation:
             equation = equation.replace("math.tan(*x)", "math.tan(x)")
+        if "/*x" in equation:
+            equation = equation.replace("/*x", "/x")
+
+        for i in (x for x in numbers if x in equation):
+            A = f"{i}*(x*x)"
+            if not A in equation:
+                equation = equation.replace("*(x*x)", "(x*x)")
+                equation = equation.replace("/*(x*x)", "(x*x)")
+        for i in (x for x in numbers if x in equation):
+            A = f"{i}*(x*x*x)"
+            if not A in equation:
+                equation = equation.replace("*(x*x*x)", "(x*x*x)")
+                equation = equation.replace("/*(x*x*x)", "(x*x*x)")
 
 
         print(equation)
@@ -130,6 +155,6 @@ def getResults(request):
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
         message = {
-            'detail': 'Lo siento, no puedo resolver esa formula, intenta reescribir la ecuación  '}
+            'detail': 'Lo siento, aún no estoy programado para resolver esa formula, intenta reescribir la ecuación :('}
 
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
