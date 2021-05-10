@@ -8,11 +8,6 @@ import pandas as pd
 import math
 import sys
 import os
-
-
-def change(equation, A, B):
-    equation = equation.replace(A, B)
-
 # Create your views here.
 @api_view(["POST"])
 def getResults(request):
@@ -68,18 +63,28 @@ def getResults(request):
             equation = equation.replace("math.tan(*x)", "math.tan(x)")
         if "/*x" in equation:
             equation = equation.replace("/*x", "/x")
+        print(equation)
+
+        check = False
 
         for i in (x for x in numbers if x in equation):
             A = f"{i}*(x*x)"
-            if not A in equation:
-                equation = equation.replace("*(x*x)", "(x*x)")
-                equation = equation.replace("/*(x*x)", "(x*x)")
+            print(A)
+            if A in equation and check == False:
+                check = True
+        if not check:
+            equation = equation.replace("*(x*x)", "(x*x)")
+            equation = equation.replace("/*(x*x)", "(x*x)")
+
+        check = False
+
         for i in (x for x in numbers if x in equation):
             A = f"{i}*(x*x*x)"
-            if not A in equation:
-                equation = equation.replace("*(x*x*x)", "(x*x*x)")
-                equation = equation.replace("/*(x*x*x)", "(x*x*x)")
-
+            if A in equation:
+                check = True
+        if not check:
+            equation = equation.replace("*(x*x*x)", "(x*x*x)")
+            equation = equation.replace("/*(x*x*x)", "(x*x*x)")
 
         print(equation)
 
